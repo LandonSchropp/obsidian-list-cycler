@@ -1,10 +1,10 @@
 {
-	"id": "list-cycler",
-	"name": "List Cycler",
-	"version": "0.0.1",
-	"minAppVersion": "0.15.0",
-	"description": "Cycles between different types of lists in Obisidan",
-	"author": "Landon Schropp",
-	"authorUrl": "https://www.landonschropp.com",
-	"isDesktopOnly": false
+  "id": "list-cycler",
+  "name": "List Cycler",
+  "version": "0.0.1",
+  "minAppVersion": "0.15.0",
+  "description": "Cycles between different types of lists in Obisidan",
+  "author": "Landon Schropp",
+  "authorUrl": "https://www.landonschropp.com",
+  "isDesktopOnly": false
 }
