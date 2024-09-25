@@ -67,7 +67,7 @@ export function replacementListItem(type: ListItemType, referenceItem: string): 
     case "checkbox":
       return replacementCheckbox(referenceItem);
     default:
-      return DEFAULT_BULLET;
+      return "";
   }
 }
 

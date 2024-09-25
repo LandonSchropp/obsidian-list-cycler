@@ -5,12 +5,12 @@ const NEXT_STATE = {
   none: "bullet",
   bullet: "number",
   number: "checkbox",
-  checkbox: "bullet",
+  checkbox: "none",
 } as const;
 
 const PREVIOUS_STATE = {
   none: "checkbox",
-  bullet: "checkbox",
+  bullet: "none",
   number: "bullet",
   checkbox: "number",
 } as const;
