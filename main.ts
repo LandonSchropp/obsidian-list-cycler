@@ -1,15 +1,16 @@
 import { cycleListItemBackward, cycleListItemForward } from "list-commands";
 import { Plugin } from "obsidian";
+import { ListCyclerSettingTab } from "settings";
 
 interface ListCyclerSettings {
-  mySetting: string;
+  checkboxes: string;
 }
 
 const DEFAULT_SETTINGS: ListCyclerSettings = {
-  mySetting: "default",
+  checkboxes: " x-<>/",
 };
 
-export default class ListCycler extends Plugin {
+export default class ListCyclerPlugin extends Plugin {
   settings: ListCyclerSettings;
 
   async onload() {
@@ -26,9 +27,11 @@ export default class ListCycler extends Plugin {
       name: "Cycle List Item Backward",
       editorCallback: cycleListItemBackward,
     });
+
+    this.addSettingTab(new ListCyclerSettingTab(this.app, this));
   }
 
-  onunload() {}
+  onunload() { }
 
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
