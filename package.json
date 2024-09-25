@@ -1,7 +1,7 @@
 {
   "name": "obsidian-list-cycler",
   "version": "0.0.1",
-  "description": "Cycles between different types of lists in Obisidan",
+  "description": "Cycles between different types of lists and checkboxes in Obisidan",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
