@@ -1,14 +1,7 @@
+import { cycleCheckboxBackward, cycleCheckboxForward } from "checkbox-commands";
 import { cycleListItemBackward, cycleListItemForward } from "list-commands";
 import { Plugin } from "obsidian";
-import { ListCyclerSettingTab } from "settings";
-
-interface ListCyclerSettings {
-  checkboxes: string;
-}
-
-const DEFAULT_SETTINGS: ListCyclerSettings = {
-  checkboxes: " x-<>/",
-};
+import { DEFAULT_SETTINGS, ListCyclerSettingTab, ListCyclerSettings } from "settings";
 
 export default class ListCyclerPlugin extends Plugin {
   settings: ListCyclerSettings;
