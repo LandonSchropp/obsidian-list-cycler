@@ -39,7 +39,6 @@ function cycleListItem(editor: Editor, transformType: (type: ListItemType) => Li
  * does not have a list item, one a checkbox list item will be inserted.
  *
  * @param editor The editor to operate on.
- * @param view The Markdown view to operate on.
  */
 export function cycleListItemBackward(editor: Editor): void {
   cycleListItem(editor, (type) => PREVIOUS_STATE[type]);
