@@ -85,3 +85,12 @@ export function extractListItem(line: string): string {
 
   return match?.[0] ?? "";
 }
+
+/**
+ * @param listItem The list item to extract the checkbox character from.
+ * @returns The character in the checkbox list item, or undefined if the list item is not a
+ * checkbox.
+ */
+export function extractCheckboxCharacter(listItem: string): string | undefined {
+  return listItem.match(CHECKBOX_ITEM_REGEX)?.[2];
+}
