@@ -21,10 +21,22 @@ export default class ListCyclerPlugin extends Plugin {
       editorCallback: cycleListItemBackward,
     });
 
+    this.addCommand({
+      id: "cycle-checkbox-forward",
+      name: "Cycle Checkbox Forward",
+      editorCallback: (editor) => cycleCheckboxForward(editor, this.settings.checkboxes),
+    });
+
+    this.addCommand({
+      id: "cycle-checkbox-backward",
+      name: "Cycle Checkbox Backward",
+      editorCallback: (editor) => cycleCheckboxBackward(editor, this.settings.checkboxes),
+    });
+
     this.addSettingTab(new ListCyclerSettingTab(this.app, this));
   }
 
-  onunload() { }
+  onunload() {}
 
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
