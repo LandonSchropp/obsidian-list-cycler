@@ -5,7 +5,7 @@ const DEFAULT_BULLET = "- ";
 
 const BULLET_ITEM_REGEX = /^([-*]) /;
 const NUMBER_ITEM_REGEX = /^(\d+)\. /;
-const CHECKBOX_ITEM_REGEX = /^([-*]) \[(?: |\S+)\] /;
+const CHECKBOX_ITEM_REGEX = /^([-*]) \[( |\S)\] /;
 
 /**
  * @param listItem The item to check.
