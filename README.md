@@ -1,98 +1,61 @@
-# Obsidian Sample Plugin
+# Obsidian List Cycler
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+This is a simple plugin for cycling between different types of lists and checkboxes in Obsidian.
+It's made to be extra simple—the plugin provides a few commands that you can map to hotkeys.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+In order to view the alternative checkboxes in this plugin, you'll want to use a theme that displays
+them such as [Minimal](https://minimal.guide/) or
+[Things](https://github.com/colineckert/obsidian-things).
 
-**Note:** The Obsidian API is still in early alpha and is subject to change at any time!
+## How It Works
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
+This plugin works at two levels: list items and checkboxes.
 
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+### List Items
 
-## First time developing plugins?
+List Cycler cycles between four different list states for a line:
 
-Quick starting guide for new plugin devs:
+- None
+- Bullet
+- Number
+- Checkbox
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+To use it, simply place your cursor on the line containing the checkbox and then run either the
+`Cycle List Item Forward` or `Cycle List Item Backward` command.
 
-## Releasing new releases
+### Checkboxes
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+List Cycler can also cycle between checkbox states. By default, it uses the following checkboxes:
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+- `[ ]`: To-do
+- `[x]`: Done
+- `[-]`: Cancelled
+- `[>]`: Forwarded
+- `[<]`: Scheduled
+- `[/]`: Incomplete
 
-## Adding your plugin to the community plugin list
+However, you can configure whatever checkboxes you'd like in the plugin's settings. For ideas on
+some options you could include, check out [Minimal's
+documentation](https://github.com/kepano/obsidian-minimal?tab=readme-ov-file#alternate-checkboxes).
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+## How to Use
 
-## How to use
+List Cycler ships with a few commands for manipulating lists. These are unbound by default, and you
+can bind them to whatever hotkeys you'd like.
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+| Name                     | Recommended Hotkey                                                      |
+| ------------------------ | ----------------------------------------------------------------------- |
+| Cycle List Item Forward  | <kbd>Command</kbd>/<kbd>Control</kbd> + <kbd>L</kbd>                    |
+| Cycle List Item Backward | <kbd>Command</kbd>/<kbd>Control</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd> |
+| Cycle Checkbox Forward   | <kbd>Command</kbd>/<kbd>Control</kbd> + <kbd>M</kbd>                    |
+| Cycle Checkbox Forward   | <kbd>Command</kbd>/<kbd>Control</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> |
 
-## Manually installing the plugin
+In addition, List Cycler can be configured via the plugin settings page.
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+## Similar Plugins
 
-## Improve code quality with eslint (optional)
+This plugin is meant to provide one specific way of interacting with lists. If that's not for you,
+you might try some of these other plugins:
 
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code.
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint .\src\`
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-  "fundingUrl": "https://buymeacoffee.com"
-}
-```
-
-If you have multiple URLs, you can also do:
-
-```json
-{
-  "fundingUrl": {
-    "Buy Me a Coffee": "https://buymeacoffee.com",
-    "GitHub Sponsor": "https://github.com/sponsors",
-    "Patreon": "https://www.patreon.com/"
-  }
-}
-```
-
-## API Documentation
-
-See https://github.com/obsidianmd/obsidian-api
+- [Task Collector](https://github.com/ebullient/obsidian-task-collector): A plugin for managing task
+  lists in Obsidian, including a modal for selecting between different types of checkboxes.
