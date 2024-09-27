@@ -4,10 +4,12 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 
 export interface ListCyclerSettings {
   checkboxes: string[];
+  cycleCheckboxRightClick: boolean;
 }
 
 export const DEFAULT_SETTINGS: ListCyclerSettings = {
   checkboxes: [" ", "x", "-", "<", ">", "/"],
+  cycleCheckboxRightClick: true,
 };
 
 export class ListCyclerSettingTab extends PluginSettingTab {
@@ -25,7 +27,7 @@ export class ListCyclerSettingTab extends PluginSettingTab {
       .setName("Checkbox characters")
       .setDesc(
         "The checkbox characters to use when cycling through checkboxes. The order of the " +
-          "characters determines the order in which they will cycle.",
+        "characters determines the order in which they will cycle.",
       )
       .addText((text) =>
         text
@@ -35,6 +37,16 @@ export class ListCyclerSettingTab extends PluginSettingTab {
             this.plugin.settings.checkboxes = value.split("");
             await this.plugin.saveSettings();
           }),
+      );
+
+    new Setting(this.containerEl)
+      .setName("Checkbox right click")
+      .setDesc("Cycles through the checkboxes when right clicking on them.")
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.cycleCheckboxRightClick).onChange(async (value) => {
+          this.plugin.settings.cycleCheckboxRightClick = value;
+          await this.plugin.saveSettings();
+        }),
       );
   }
 }
