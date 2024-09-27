@@ -59,3 +59,5 @@ you might try some of these other plugins:
 
 - [Task Collector](https://github.com/ebullient/obsidian-task-collector): A plugin for managing task
   lists in Obsidian, including a modal for selecting between different types of checkboxes.
+- [Task Marker](https://github.com/wenlzhang/obsidian-task-marker): Cycle between different task
+  states and optionally append dates to tasks via hotkeys or context menus.
