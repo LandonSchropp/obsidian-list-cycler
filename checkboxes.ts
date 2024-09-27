@@ -1,6 +1,6 @@
 import { extractCheckboxCharacter } from "list-items";
 
-const CHECKBOX_REPLACEMENT_REGEX = /(?<=^[-*] \[) |\S(?=\] )/;
+const CHECKBOX_REPLACEMENT_REGEX = /(^[-*] \[)( |\S)(\] )/;
 
 function offsetCheckboxCharacter(
   listItem: string,
@@ -39,5 +39,9 @@ export function replacementCheckbox(
     return listItem;
   }
 
-  return listItem.replace(CHECKBOX_REPLACEMENT_REGEX, replacementCharacter);
+  // NOTE: Previously, I used a lookbehind and lookahead in the regex to avoid the need to capture
+  // multiple parts of the string. However, this feature is not supported in an older iOS version
+  // that Obsidian must be compatible with.
+  const match = listItem.match(CHECKBOX_REPLACEMENT_REGEX);
+  return `${match![1]}${replacementCharacter}${match![3]}`;
 }
