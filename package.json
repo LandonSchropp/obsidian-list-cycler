@@ -1,6 +1,6 @@
 {
   "name": "obsidian-list-cycler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cycles between different types of lists and checkboxes in Obisidan",
   "main": "main.js",
   "scripts": {
