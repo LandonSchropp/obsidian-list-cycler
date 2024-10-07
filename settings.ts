@@ -2,10 +2,29 @@ import ListCyclerPlugin from "./main";
 
 import { App, PluginSettingTab, Setting } from "obsidian";
 
-export interface ListCyclerSettings {
-  checkboxes: string[];
-  cycleCheckboxRightClick: boolean;
-}
+/**
+ * The settings for an individual list item inside of a Group. Currently, this is just the text of
+ * the list item. This could be expanded to include more information about the list item.
+ */
+type ListItem = {
+  /** The text for the list item. */
+  text: string;
+};
+
+/**
+ * Represents a group of list items to cycle.
+ */
+type Group = {
+  /** The name of the group. */
+  name: string;
+
+  /** The list items in the group. */
+  listItems: ListItem[];
+};
+
+export type ListCyclerSettings = {
+  groups: Group[];
+};
 
 export const DEFAULT_SETTINGS: ListCyclerSettings = {
   checkboxes: [" ", "x", "-", "<", ">", "/"],
