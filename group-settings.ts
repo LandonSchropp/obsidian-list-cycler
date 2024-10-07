@@ -64,28 +64,13 @@ export class GroupSettings {
   }
 
   display(): void {
-    // Temporary Separator between groups
-    this.containerEl.createEl("br");
-    this.containerEl.createEl("br");
-    this.containerEl.createEl("br");
-
-    // Name Input
-    new Setting(this.containerEl)
-      .setName("Name")
-      .setDesc("The name of the group")
-      .addText((text) =>
-        text
-          .setPlaceholder(" x-<>/")
-          .setValue(this.settings.name)
-          .onChange(async (value) => {
-            await this.setSettings({ ...this.settings, name: value });
-          }),
-      );
-
-    // Delete button
-    new Setting(this.containerEl)
-      .setName("Delete Group")
-      .setDesc("Permanently removes the group")
+    // Name
+    const nameSetting = new Setting(this.containerEl)
+      .setHeading()
+      .setName(this.settings.name)
+      .addButton((button) => {
+        button.setButtonText("Rename").onClick(() => {});
+      })
       .addButton((button) => {
         button
           .setButtonText("Delete")
@@ -93,17 +78,17 @@ export class GroupSettings {
           .onClick(() => this.deleteAndRerender());
       });
 
-    // Add button
-    new Setting(this.containerEl)
-      .setName("Add List Item")
-      .setDesc("Add a new list item to cycle through")
-      .addButton((button) => {
-        button.setButtonText("Add List Item").onClick(() => this.addListItem());
-      });
+    nameSetting.settingEl.style.marginTop = "3em";
+    nameSetting.nameEl.style.fontSize = "var(--h4-size)";
 
     // List items
     for (let index = 0; index < this.settings.listItems.length; index++) {
       new ListItemSettings(this, index).display();
     }
+
+    // Add List Item
+    new Setting(this.containerEl).addButton((button) => {
+      button.setButtonText("Add List Item").onClick(() => this.addListItem());
+    });
   }
 }

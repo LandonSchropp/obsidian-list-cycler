@@ -79,7 +79,7 @@ export class ListItemSettings {
   }
 
   display(): void {
-    new Setting(this.containerEl)
+    const setting = new Setting(this.containerEl)
       .addText((text) => {
         text
           .setPlaceholder("List Item")
@@ -100,5 +100,8 @@ export class ListItemSettings {
           .setDisabled(this.isOnlyListItem)
           .onClick(() => this.deleteAndRerender());
       });
+
+    // Remove the name and description, since it's not necessary for list items.
+    setting.infoEl.remove();
   }
 }

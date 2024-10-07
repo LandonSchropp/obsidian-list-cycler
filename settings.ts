@@ -86,21 +86,38 @@ export class Settings extends PluginSettingTab {
   display(): void {
     this.containerEl.empty();
 
-    new Setting(this.containerEl)
-      .setName("Add Group")
-      .setDesc("Creates a new group of list items to cycle through.")
+    const titleSetting = new Setting(this.containerEl)
+      .setHeading()
+      .setName("List Cycler")
+      .setDesc(
+        "Configure the groups and list items to cycle through. For each group, List Cycler " +
+          "will generate commands for you to cycle through the list items.",
+      );
+
+    titleSetting.nameEl.style.fontSize = "var(--h2-size)";
+
+    for (let index = 0; index < this.settings.groups.length; index++) {
+      new GroupSettings(this, index).display();
+    }
+
+    const newGroupSetting = new Setting(this.containerEl)
+      .setHeading()
+      .setName("Add a New Group")
+      .setDesc("Add a group to cycle through")
       .addButton((button) => {
-        button.setButtonText("Add Group");
-        button.onClick(async () => {
+        button.setButtonText("Add Group").onClick(async () => {
           await this.setSettingsAndRerender({
             ...this.settings,
             groups: [...this.settings.groups, structuredClone(EMPTY_GROUP)],
           });
         });
+
+        if (this.settings.groups.length === 0) {
+          button.setCta();
+        }
       });
 
-    for (let index = 0; index < this.settings.groups.length; index++) {
-      new GroupSettings(this, index).display();
-    }
+    // Add a little extra space after the last group
+    newGroupSetting.settingEl.style.marginTop = "3em";
   }
 }
