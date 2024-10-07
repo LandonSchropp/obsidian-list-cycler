@@ -1,10 +1,11 @@
-import { cycleCheckboxBackward, cycleCheckboxForward } from "checkbox-commands";
+// import { cycleCheckboxBackward, cycleCheckboxForward } from "checkbox-commands";
 import { cycleListItemBackward, cycleListItemForward } from "list-commands";
 import { Plugin } from "obsidian";
-import { DEFAULT_SETTINGS, ListCyclerSettingTab, ListCyclerSettings } from "settings";
+import { DEFAULT_SETTINGS, Settings } from "settings";
+import { Settings as SettingsType } from "./types";
 
 export default class ListCyclerPlugin extends Plugin {
-  settings: ListCyclerSettings;
+  settings: SettingsType;
 
   async onload() {
     await this.loadSettings();
@@ -23,21 +24,21 @@ export default class ListCyclerPlugin extends Plugin {
       editorCallback: cycleListItemBackward,
     });
 
-    this.addCommand({
-      id: "cycle-checkbox-forward",
-      name: "Cycle Checkbox Forward",
-      icon: "square-arrow-right",
-      editorCallback: (editor) => cycleCheckboxForward(editor, this.settings.checkboxes),
-    });
+    // this.addCommand({
+    //   id: "cycle-checkbox-forward",
+    //   name: "Cycle Checkbox Forward",
+    //   icon: "square-arrow-right",
+    //   editorCallback: (editor) => cycleCheckboxForward(editor, this.settings.checkboxes),
+    // });
+    //
+    // this.addCommand({
+    //   id: "cycle-checkbox-backward",
+    //   name: "Cycle Checkbox Backward",
+    //   icon: "square-arrow-left",
+    //   editorCallback: (editor) => cycleCheckboxBackward(editor, this.settings.checkboxes),
+    // });
 
-    this.addCommand({
-      id: "cycle-checkbox-backward",
-      name: "Cycle Checkbox Backward",
-      icon: "square-arrow-left",
-      editorCallback: (editor) => cycleCheckboxBackward(editor, this.settings.checkboxes),
-    });
-
-    this.addSettingTab(new ListCyclerSettingTab(this.app, this));
+    this.addSettingTab(new Settings(this.app, this));
   }
 
   onunload() {}

@@ -19,7 +19,7 @@ export type GroupSettings = {
 };
 
 /** The settings for List Cycler. */
-export type ListCyclerSettings = {
+export type Settings = {
   /** The groups to cycle through. */
   groups: GroupSettings[];
 };

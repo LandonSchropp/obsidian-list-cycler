@@ -2,10 +2,10 @@ import { GroupSettings } from "group-settings";
 import ListCyclerPlugin from "./main";
 
 import { App, PluginSettingTab, Setting } from "obsidian";
-import { ListCyclerSettings } from "types";
+import { Settings as SettingsType } from "types";
 
 /** The default settings for List Cycler. */
-export const DEFAULT_SETTINGS: ListCyclerSettings = {
+export const DEFAULT_SETTINGS: SettingsType = {
   groups: [
     {
       name: "List Type",
@@ -61,7 +61,7 @@ const EMPTY_GROUP = {
 };
 
 /** The settings tab for List Cycler. */
-export class ListCyclerSettingTab extends PluginSettingTab {
+export class Settings extends PluginSettingTab {
   plugin: ListCyclerPlugin;
 
   constructor(app: App, plugin: ListCyclerPlugin) {
@@ -69,16 +69,16 @@ export class ListCyclerSettingTab extends PluginSettingTab {
     this.plugin = plugin;
   }
 
-  get settings(): ListCyclerSettings {
+  get settings(): SettingsType {
     return this.plugin.settings;
   }
 
-  async setSettings(settings: ListCyclerSettings): Promise<void> {
+  async setSettings(settings: SettingsType): Promise<void> {
     this.plugin.settings = settings;
     await this.plugin.saveSettings();
   }
 
-  async setSettingsAndRerender(settings: ListCyclerSettings): Promise<void> {
+  async setSettingsAndRerender(settings: SettingsType): Promise<void> {
     await this.setSettings(settings);
     this.display();
   }

@@ -1,13 +1,13 @@
 import { Setting } from "obsidian";
-import { ListCyclerSettingTab } from "settings";
-import { GroupSettings as GroupSettingsType, ListCyclerSettings } from "types";
+import { Settings } from "settings";
+import { GroupSettings as GroupSettingsType, Settings as SettingsType } from "types";
 
 /** The settings for a single group. */
 export class GroupSettings {
-  settingsTab: ListCyclerSettingTab;
+  settingsTab: Settings;
   index: number;
 
-  constructor(settingsTab: ListCyclerSettingTab, index: number) {
+  constructor(settingsTab: Settings, index: number) {
     this.settingsTab = settingsTab;
     this.index = index;
   }
@@ -28,7 +28,7 @@ export class GroupSettings {
     return this.plugin.settings.groups[this.index];
   }
 
-  mergeGroupSettings(settings: GroupSettingsType | undefined): ListCyclerSettings {
+  mergeGroupSettings(settings: GroupSettingsType | undefined): SettingsType {
     return {
       ...this.settingsTab.settings,
       groups: [
