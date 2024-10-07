@@ -1,31 +1,10 @@
+import { GroupSettings } from "group-settings";
 import ListCyclerPlugin from "./main";
 
 import { App, PluginSettingTab, Setting } from "obsidian";
+import { ListCyclerSettings } from "types";
 
-/**
- * The settings for an individual list item inside of a Group. Currently, this is just the text of
- * the list item. This could be expanded to include more information about the list item.
- */
-type ListItem = {
-  /** The text for the list item. */
-  text: string;
-};
-
-/**
- * Represents a group of list items to cycle.
- */
-type Group = {
-  /** The name of the group. */
-  name: string;
-
-  /** The list items in the group. */
-  listItems: ListItem[];
-};
-
-export type ListCyclerSettings = {
-  groups: Group[];
-};
-
+/** The default settings for List Cycler. */
 export const DEFAULT_SETTINGS: ListCyclerSettings = {
   groups: [
     {
@@ -71,6 +50,17 @@ export const DEFAULT_SETTINGS: ListCyclerSettings = {
   ],
 };
 
+/** An empty group to clone when adding a new group. */
+const EMPTY_GROUP = {
+  name: "",
+  listItems: [
+    {
+      text: "",
+    },
+  ],
+};
+
+/** The settings tab for List Cycler. */
 export class ListCyclerSettingTab extends PluginSettingTab {
   plugin: ListCyclerPlugin;
 
@@ -79,33 +69,38 @@ export class ListCyclerSettingTab extends PluginSettingTab {
     this.plugin = plugin;
   }
 
+  get settings(): ListCyclerSettings {
+    return this.plugin.settings;
+  }
+
+  async setSettings(settings: ListCyclerSettings): Promise<void> {
+    this.plugin.settings = settings;
+    await this.plugin.saveSettings();
+  }
+
+  async setSettingsAndRerender(settings: ListCyclerSettings): Promise<void> {
+    await this.setSettings(settings);
+    this.display();
+  }
+
   display(): void {
     this.containerEl.empty();
 
     new Setting(this.containerEl)
-      .setName("Checkbox characters")
-      .setDesc(
-        "The checkbox characters to use when cycling through checkboxes. The order of the " +
-        "characters determines the order in which they will cycle.",
-      )
-      .addText((text) =>
-        text
-          .setPlaceholder(" x-<>/")
-          .setValue(this.plugin.settings.checkboxes.join(""))
-          .onChange(async (value) => {
-            this.plugin.settings.checkboxes = value.split("");
-            await this.plugin.saveSettings();
-          }),
-      );
+      .setName("Add Group")
+      .setDesc("Creates a new group of list items to cycle through.")
+      .addButton((button) => {
+        button.setButtonText("Add Group");
+        button.onClick(async () => {
+          await this.setSettingsAndRerender({
+            ...this.settings,
+            groups: [...this.settings.groups, structuredClone(EMPTY_GROUP)],
+          });
+        });
+      });
 
-    new Setting(this.containerEl)
-      .setName("Checkbox right click")
-      .setDesc("Cycles through the checkboxes when right clicking on them.")
-      .addToggle((toggle) =>
-        toggle.setValue(this.plugin.settings.cycleCheckboxRightClick).onChange(async (value) => {
-          this.plugin.settings.cycleCheckboxRightClick = value;
-          await this.plugin.saveSettings();
-        }),
-      );
+    for (let index = 0; index < this.settings.groups.length; index++) {
+      new GroupSettings(this, index).display();
+    }
   }
 }
