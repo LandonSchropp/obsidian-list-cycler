@@ -27,8 +27,48 @@ export type ListCyclerSettings = {
 };
 
 export const DEFAULT_SETTINGS: ListCyclerSettings = {
-  checkboxes: [" ", "x", "-", "<", ">", "/"],
-  cycleCheckboxRightClick: true,
+  groups: [
+    {
+      name: "List Type",
+      listItems: [
+        {
+          text: "-",
+        },
+        {
+          text: "1. ",
+        },
+        {
+          text: "- [ ]",
+        },
+        {
+          text: "",
+        },
+      ],
+    },
+    {
+      name: "Task",
+      listItems: [
+        {
+          text: "- [ ]",
+        },
+        {
+          text: "- [x]",
+        },
+        {
+          text: "- [-]",
+        },
+        {
+          text: "- [/]",
+        },
+        {
+          text: "- [>]",
+        },
+        {
+          text: "- [<]",
+        },
+      ],
+    },
+  ],
 };
 
 export class ListCyclerSettingTab extends PluginSettingTab {
