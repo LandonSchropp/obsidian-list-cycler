@@ -1,7 +1,12 @@
 import { ListItemSettings } from "list-item-settings";
 import { Setting } from "obsidian";
 import { Settings } from "settings";
-import { GroupSettings as GroupSettingsType, Settings as SettingsType } from "types";
+import {
+  GroupSettings as GroupSettingsType,
+  Settings as SettingsType,
+  ListItemSettings as ListItemSettingsType,
+} from "types";
+import { splice } from "utilities";
 
 const EMPTY_LIST_ITEM = {
   text: "",
@@ -33,38 +38,45 @@ export class GroupSettings {
     return this.plugin.settings.groups[this.index];
   }
 
-  mergeGroupSettings(settings: GroupSettingsType | undefined): SettingsType {
-    return {
-      ...this.settingsTab.settings,
-      groups: [
-        ...this.settingsTab.settings.groups.slice(0, this.index),
-        settings,
-        ...this.settingsTab.settings.groups.slice(this.index + 1),
-      ].filter((group) => group !== undefined),
-    };
+  rerender() {
+    this.settingsTab.rerender();
   }
 
-  async setSettings(settings: GroupSettingsType): Promise<void> {
-    await this.settingsTab.setSettings(this.mergeGroupSettings(settings));
+  async setName(name: string): Promise<void> {
+    await this.settingsTab.spliceGroups(this.index, 1, [
+      {
+        ...this.settings,
+        name,
+      },
+    ]);
+
+    this.rerender();
   }
 
-  async setSettingsAndRerender(settings: GroupSettingsType): Promise<void> {
-    await this.settingsTab.setSettingsAndRerender(this.mergeGroupSettings(settings));
-  }
-
-  async deleteAndRerender() {
-    await this.settingsTab.setSettingsAndRerender(this.mergeGroupSettings(undefined));
+  async spliceListItems(
+    index: number,
+    deleteCount: number,
+    listItems: ListItemSettingsType[],
+  ): Promise<void> {
+    this.settingsTab.spliceGroups(this.index, 1, [
+      {
+        ...this.settings,
+        listItems: splice(this.settings.listItems, index, deleteCount, listItems),
+      },
+    ]);
   }
 
   async addListItem() {
-    await this.setSettingsAndRerender({
-      ...this.settings,
-      listItems: [...this.settings.listItems, structuredClone(EMPTY_LIST_ITEM)],
-    });
+    this.spliceListItems(this.settings.listItems.length, 0, [structuredClone(EMPTY_LIST_ITEM)]);
+    this.rerender();
+  }
+
+  async delete() {
+    this.settingsTab.spliceGroups(this.index, 1, []);
+    this.rerender();
   }
 
   display(): void {
-    // Name
     const nameSetting = new Setting(this.containerEl)
       .setHeading()
       .setName(this.settings.name)
@@ -75,7 +87,7 @@ export class GroupSettings {
         button
           .setButtonText("Delete")
           .setWarning()
-          .onClick(() => this.deleteAndRerender());
+          .onClick(() => this.delete());
       });
 
     nameSetting.settingEl.style.marginTop = "3em";

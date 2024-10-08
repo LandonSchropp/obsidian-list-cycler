@@ -43,27 +43,40 @@ export class ListItemSettings {
     return this.groupSettings.settings.listItems.length <= 1;
   }
 
-  mergeListItemSettings(settings: ListItemSettingsType | undefined): GroupSettingsType {
-    return {
-      ...this.groupSettings.settings,
-      listItems: [
-        ...this.groupSettings.settings.listItems.slice(0, this.index),
-        settings,
-        ...this.groupSettings.settings.listItems.slice(this.index + 1),
-      ].filter((group) => group !== undefined),
-    };
+  rerender() {
+    this.groupSettings.rerender();
   }
 
-  async setSettings(settings: ListItemSettingsType): Promise<void> {
-    await this.groupSettings.setSettings(this.mergeListItemSettings(settings));
+  async setText(text: string): Promise<void> {
+    await this.groupSettings.spliceListItems(this.index, 1, [
+      {
+        ...this.settings,
+        text,
+      },
+    ]);
   }
 
-  async setSettingsAndRerender(settings: ListItemSettingsType): Promise<void> {
-    await this.groupSettings.setSettingsAndRerender(this.mergeListItemSettings(settings));
+  async moveUp() {
+    await this.groupSettings.spliceListItems(this.index - 1, 2, [
+      this.groupSettings.settings.listItems[this.index],
+      this.groupSettings.settings.listItems[this.index - 1],
+    ]);
+
+    this.rerender();
   }
 
-  async deleteAndRerender() {
-    await this.groupSettings.setSettingsAndRerender(this.mergeListItemSettings(undefined));
+  async moveDown() {
+    await this.groupSettings.spliceListItems(this.index, 2, [
+      this.groupSettings.settings.listItems[this.index + 1],
+      this.groupSettings.settings.listItems[this.index],
+    ]);
+
+    this.rerender();
+  }
+
+  async delete() {
+    await this.groupSettings.spliceListItems(this.index, 1, []);
+    this.rerender();
   }
 
   private styleExtraButton(
@@ -84,21 +97,20 @@ export class ListItemSettings {
         text
           .setPlaceholder("List Item")
           .setValue(this.settings.text)
-          .onChange((value) => this.setSettings({ ...this.settings, text: value }));
+          .onChange((value) => this.setText(value));
 
         text.inputEl.style.marginRight = "auto";
       })
       .addExtraButton((button) => {
         this.styleExtraButton(button, "arrow-up", this.isFirstListItem, () => {});
+        button.onClick(() => this.moveUp());
       })
       .addExtraButton((button) => {
         this.styleExtraButton(button, "arrow-down", this.isLastListItem, () => {});
+        button.onClick(() => this.moveDown());
       })
       .addExtraButton((button) => {
-        button
-          .setIcon("trash")
-          .setDisabled(this.isOnlyListItem)
-          .onClick(() => this.deleteAndRerender());
+        this.styleExtraButton(button, "trash", this.isOnlyListItem, () => this.delete());
       });
 
     // Remove the name and description, since it's not necessary for list items.

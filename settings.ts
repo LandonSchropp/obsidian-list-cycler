@@ -1,8 +1,8 @@
 import { GroupSettings } from "group-settings";
 import ListCyclerPlugin from "./main";
-
 import { App, PluginSettingTab, Setting } from "obsidian";
-import { Settings as SettingsType } from "types";
+import { Settings as SettingsType, GroupSettings as GroupSettingsType } from "types";
+import { splice } from "utilities";
 
 /** The default settings for List Cycler. */
 export const DEFAULT_SETTINGS: SettingsType = {
@@ -73,13 +73,28 @@ export class Settings extends PluginSettingTab {
     return this.plugin.settings;
   }
 
-  async setSettings(settings: SettingsType): Promise<void> {
+  set settings(settings: SettingsType) {
     this.plugin.settings = settings;
+  }
+
+  async save(): Promise<void> {
     await this.plugin.saveSettings();
   }
 
-  async setSettingsAndRerender(settings: SettingsType): Promise<void> {
-    await this.setSettings(settings);
+  async spliceGroups(
+    index: number,
+    deleteCount: number,
+    groups: GroupSettingsType[],
+  ): Promise<void> {
+    this.settings = {
+      ...this.settings,
+      groups: splice(this.settings.groups, index, deleteCount, groups),
+    };
+
+    await this.save();
+  }
+
+  rerender() {
     this.display();
   }
 
@@ -106,15 +121,9 @@ export class Settings extends PluginSettingTab {
       .setDesc("Add a group to cycle through")
       .addButton((button) => {
         button.setButtonText("Add Group").onClick(async () => {
-          await this.setSettingsAndRerender({
-            ...this.settings,
-            groups: [...this.settings.groups, structuredClone(EMPTY_GROUP)],
-          });
+          await this.spliceGroups(this.settings.groups.length, 0, [structuredClone(EMPTY_GROUP)]);
+          this.rerender();
         });
-
-        if (this.settings.groups.length === 0) {
-          button.setCta();
-        }
       });
 
     // Add a little extra space after the last group
