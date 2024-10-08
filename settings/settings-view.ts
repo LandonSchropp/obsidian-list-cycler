@@ -3,6 +3,8 @@ import ListCyclerPlugin from "main";
 import { App, PluginSettingTab, Setting } from "obsidian";
 import { Settings, GroupSettings } from "types";
 import { splice } from "utilities";
+import { EditGroupNameModal } from "./edit-group-name-modal";
+import { EMPTY_GROUP } from "./constants";
 
 /** The default settings for List Cycler. */
 export const DEFAULT_SETTINGS: Settings = {
@@ -50,16 +52,6 @@ export const DEFAULT_SETTINGS: Settings = {
   ],
 };
 
-/** An empty group to clone when adding a new group. */
-const EMPTY_GROUP = {
-  name: "",
-  listItems: [
-    {
-      text: "",
-    },
-  ],
-};
-
 /** The settings view for List Cycler. */
 export class SettingsView extends PluginSettingTab {
   plugin: ListCyclerPlugin;
@@ -94,6 +86,17 @@ export class SettingsView extends PluginSettingTab {
     this.display();
   }
 
+  openCreateGroupModal() {
+    new EditGroupNameModal(this.app, "", true).open((name) => this.createGroup(name));
+  }
+
+  async createGroup(name: string) {
+    await this.spliceGroups(this.settings.groups.length, 0, [
+      { ...structuredClone(EMPTY_GROUP), name },
+    ]);
+    this.rerender();
+  }
+
   display(): void {
     this.containerEl.empty();
 
@@ -102,7 +105,7 @@ export class SettingsView extends PluginSettingTab {
       .setName("List Cycler")
       .setDesc(
         "Configure the groups and list items to cycle through. For each group, List Cycler " +
-          "will generate commands for you to cycle through the list items.",
+        "will generate commands for you to cycle through the list items.",
       );
 
     titleSetting.nameEl.style.fontSize = "var(--h2-size)";
@@ -116,10 +119,7 @@ export class SettingsView extends PluginSettingTab {
       .setName("Add a New Group")
       .setDesc("Add a group to cycle through")
       .addButton((button) => {
-        button.setButtonText("Add Group").onClick(async () => {
-          await this.spliceGroups(this.settings.groups.length, 0, [structuredClone(EMPTY_GROUP)]);
-          this.rerender();
-        });
+        button.setButtonText("Add Group").onClick(() => this.openCreateGroupModal());
       });
 
     // Add a little extra space after the last group

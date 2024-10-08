@@ -4,10 +4,8 @@ import { SettingsView } from "settings/settings-view";
 import { ListItemSettings } from "types";
 import { splice } from "utilities";
 import { ConfirmDeleteModal } from "./confirm-delete-modal";
-
-const EMPTY_LIST_ITEM = {
-  text: "",
-};
+import { EditGroupNameModal } from "./edit-group-name-modal";
+import { EMPTY_LIST_ITEM } from "./constants";
 
 /** The settings for a single group. */
 export class GroupSettingsView {
@@ -73,6 +71,10 @@ export class GroupSettingsView {
     this.rerender();
   }
 
+  openEditNameModal() {
+    new EditGroupNameModal(this.app, this.settings.name, false).open((name) => this.setName(name));
+  }
+
   openConfirmDeleteModal() {
     new ConfirmDeleteModal(this.app).open(() => this.delete());
   }
@@ -82,7 +84,7 @@ export class GroupSettingsView {
       .setHeading()
       .setName(this.settings.name)
       .addButton((button) => {
-        button.setButtonText("Rename").onClick(() => { });
+        button.setButtonText("Rename").onClick(() => this.openEditNameModal());
       })
       .addButton((button) => {
         button
