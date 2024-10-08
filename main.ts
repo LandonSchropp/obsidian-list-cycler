@@ -1,7 +1,7 @@
 // import { cycleCheckboxBackward, cycleCheckboxForward } from "checkbox-commands";
 import { cycleListItemBackward, cycleListItemForward } from "list-commands";
 import { Plugin } from "obsidian";
-import { DEFAULT_SETTINGS, Settings } from "settings";
+import { DEFAULT_SETTINGS, SettingsView } from "settings/settings-view";
 import { Settings as SettingsType } from "./types";
 
 export default class ListCyclerPlugin extends Plugin {
@@ -38,7 +38,7 @@ export default class ListCyclerPlugin extends Plugin {
     //   editorCallback: (editor) => cycleCheckboxBackward(editor, this.settings.checkboxes),
     // });
 
-    this.addSettingTab(new Settings(this.app, this));
+    this.addSettingTab(new SettingsView(this.app, this));
   }
 
   onunload() {}

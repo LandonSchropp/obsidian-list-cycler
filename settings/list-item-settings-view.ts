@@ -1,34 +1,30 @@
 import { ExtraButtonComponent, Setting } from "obsidian";
-import { GroupSettings } from "./group-settings";
-import {
-  ListItemSettings as ListItemSettingsType,
-  GroupSettings as GroupSettingsType,
-} from "./types";
+import { GroupSettingsView } from "settings/group-settings-view";
 
 /** The settings for a single group. */
-export class ListItemSettings {
-  groupSettings: GroupSettings;
+export class ListItemSettingsView {
+  groupSettingsView: GroupSettingsView;
   index: number;
 
-  constructor(groupSettings: GroupSettings, index: number) {
-    this.groupSettings = groupSettings;
+  constructor(groupSettingsView: GroupSettingsView, index: number) {
+    this.groupSettingsView = groupSettingsView;
     this.index = index;
   }
 
   get app() {
-    return this.groupSettings.app;
+    return this.groupSettingsView.app;
   }
 
   get plugin() {
-    return this.groupSettings.plugin;
+    return this.groupSettingsView.plugin;
   }
 
   get containerEl() {
-    return this.groupSettings.containerEl;
+    return this.groupSettingsView.containerEl;
   }
 
   get settings() {
-    return this.groupSettings.settings.listItems[this.index];
+    return this.groupSettingsView.settings.listItems[this.index];
   }
 
   get isFirstListItem() {
@@ -36,19 +32,19 @@ export class ListItemSettings {
   }
 
   get isLastListItem() {
-    return this.index === this.groupSettings.settings.listItems.length - 1;
+    return this.index === this.groupSettingsView.settings.listItems.length - 1;
   }
 
   get isOnlyListItem() {
-    return this.groupSettings.settings.listItems.length <= 1;
+    return this.groupSettingsView.settings.listItems.length <= 1;
   }
 
   rerender() {
-    this.groupSettings.rerender();
+    this.groupSettingsView.rerender();
   }
 
   async setText(text: string): Promise<void> {
-    await this.groupSettings.spliceListItems(this.index, 1, [
+    await this.groupSettingsView.spliceListItems(this.index, 1, [
       {
         ...this.settings,
         text,
@@ -57,25 +53,25 @@ export class ListItemSettings {
   }
 
   async moveUp() {
-    await this.groupSettings.spliceListItems(this.index - 1, 2, [
-      this.groupSettings.settings.listItems[this.index],
-      this.groupSettings.settings.listItems[this.index - 1],
+    await this.groupSettingsView.spliceListItems(this.index - 1, 2, [
+      this.groupSettingsView.settings.listItems[this.index],
+      this.groupSettingsView.settings.listItems[this.index - 1],
     ]);
 
     this.rerender();
   }
 
   async moveDown() {
-    await this.groupSettings.spliceListItems(this.index, 2, [
-      this.groupSettings.settings.listItems[this.index + 1],
-      this.groupSettings.settings.listItems[this.index],
+    await this.groupSettingsView.spliceListItems(this.index, 2, [
+      this.groupSettingsView.settings.listItems[this.index + 1],
+      this.groupSettingsView.settings.listItems[this.index],
     ]);
 
     this.rerender();
   }
 
   async delete() {
-    await this.groupSettings.spliceListItems(this.index, 1, []);
+    await this.groupSettingsView.spliceListItems(this.index, 1, []);
     this.rerender();
   }
 

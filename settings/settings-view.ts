@@ -1,11 +1,11 @@
-import { GroupSettings } from "group-settings";
-import ListCyclerPlugin from "./main";
+import { GroupSettingsView } from "settings/group-settings-view";
+import ListCyclerPlugin from "main";
 import { App, PluginSettingTab, Setting } from "obsidian";
-import { Settings as SettingsType, GroupSettings as GroupSettingsType } from "types";
+import { Settings, GroupSettings } from "types";
 import { splice } from "utilities";
 
 /** The default settings for List Cycler. */
-export const DEFAULT_SETTINGS: SettingsType = {
+export const DEFAULT_SETTINGS: Settings = {
   groups: [
     {
       name: "List Type",
@@ -60,8 +60,8 @@ const EMPTY_GROUP = {
   ],
 };
 
-/** The settings tab for List Cycler. */
-export class Settings extends PluginSettingTab {
+/** The settings view for List Cycler. */
+export class SettingsView extends PluginSettingTab {
   plugin: ListCyclerPlugin;
 
   constructor(app: App, plugin: ListCyclerPlugin) {
@@ -69,11 +69,11 @@ export class Settings extends PluginSettingTab {
     this.plugin = plugin;
   }
 
-  get settings(): SettingsType {
+  get settings(): Settings {
     return this.plugin.settings;
   }
 
-  set settings(settings: SettingsType) {
+  set settings(settings: Settings) {
     this.plugin.settings = settings;
   }
 
@@ -81,11 +81,7 @@ export class Settings extends PluginSettingTab {
     await this.plugin.saveSettings();
   }
 
-  async spliceGroups(
-    index: number,
-    deleteCount: number,
-    groups: GroupSettingsType[],
-  ): Promise<void> {
+  async spliceGroups(index: number, deleteCount: number, groups: GroupSettings[]): Promise<void> {
     this.settings = {
       ...this.settings,
       groups: splice(this.settings.groups, index, deleteCount, groups),
@@ -112,7 +108,7 @@ export class Settings extends PluginSettingTab {
     titleSetting.nameEl.style.fontSize = "var(--h2-size)";
 
     for (let index = 0; index < this.settings.groups.length; index++) {
-      new GroupSettings(this, index).display();
+      new GroupSettingsView(this, index).display();
     }
 
     const newGroupSetting = new Setting(this.containerEl)

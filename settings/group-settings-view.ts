@@ -1,11 +1,7 @@
-import { ListItemSettings } from "list-item-settings";
+import { ListItemSettingsView } from "settings/list-item-settings-view";
 import { Setting } from "obsidian";
-import { Settings } from "settings";
-import {
-  GroupSettings as GroupSettingsType,
-  Settings as SettingsType,
-  ListItemSettings as ListItemSettingsType,
-} from "types";
+import { SettingsView } from "settings/settings-view";
+import { ListItemSettings } from "types";
 import { splice } from "utilities";
 
 const EMPTY_LIST_ITEM = {
@@ -13,25 +9,25 @@ const EMPTY_LIST_ITEM = {
 };
 
 /** The settings for a single group. */
-export class GroupSettings {
-  settingsTab: Settings;
+export class GroupSettingsView {
+  settingsView: SettingsView;
   index: number;
 
-  constructor(settingsTab: Settings, index: number) {
-    this.settingsTab = settingsTab;
+  constructor(settingsView: SettingsView, index: number) {
+    this.settingsView = settingsView;
     this.index = index;
   }
 
   get app() {
-    return this.settingsTab.app;
+    return this.settingsView.app;
   }
 
   get plugin() {
-    return this.settingsTab.plugin;
+    return this.settingsView.plugin;
   }
 
   get containerEl() {
-    return this.settingsTab.containerEl;
+    return this.settingsView.containerEl;
   }
 
   get settings() {
@@ -39,11 +35,11 @@ export class GroupSettings {
   }
 
   rerender() {
-    this.settingsTab.rerender();
+    this.settingsView.rerender();
   }
 
   async setName(name: string): Promise<void> {
-    await this.settingsTab.spliceGroups(this.index, 1, [
+    await this.settingsView.spliceGroups(this.index, 1, [
       {
         ...this.settings,
         name,
@@ -56,9 +52,9 @@ export class GroupSettings {
   async spliceListItems(
     index: number,
     deleteCount: number,
-    listItems: ListItemSettingsType[],
+    listItems: ListItemSettings[],
   ): Promise<void> {
-    this.settingsTab.spliceGroups(this.index, 1, [
+    this.settingsView.spliceGroups(this.index, 1, [
       {
         ...this.settings,
         listItems: splice(this.settings.listItems, index, deleteCount, listItems),
@@ -72,7 +68,7 @@ export class GroupSettings {
   }
 
   async delete() {
-    this.settingsTab.spliceGroups(this.index, 1, []);
+    this.settingsView.spliceGroups(this.index, 1, []);
     this.rerender();
   }
 
@@ -95,7 +91,7 @@ export class GroupSettings {
 
     // List items
     for (let index = 0; index < this.settings.listItems.length; index++) {
-      new ListItemSettings(this, index).display();
+      new ListItemSettingsView(this, index).display();
     }
 
     // Add List Item
