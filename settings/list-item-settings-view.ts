@@ -75,13 +75,14 @@ export class ListItemSettingsView {
     this.rerender();
   }
 
-  private styleExtraButton(
+  private customizeExtraButton(
     button: ExtraButtonComponent,
     icon: string,
+    tooltip: string,
     disabled: boolean,
     callback: () => void,
   ): void {
-    button.setIcon(icon).setDisabled(disabled).onClick(callback);
+    button.setIcon(icon).setDisabled(disabled).setTooltip(tooltip).onClick(callback);
     button.extraSettingsEl.style.cursor = disabled ? "not-allowed" : "pointer";
     button.extraSettingsEl.style.opacity = disabled ? "50%" : "100%";
     button.extraSettingsEl.style.pointerEvents = disabled ? "none" : "auto";
@@ -98,15 +99,17 @@ export class ListItemSettingsView {
         text.inputEl.style.marginRight = "auto";
       })
       .addExtraButton((button) => {
-        this.styleExtraButton(button, "arrow-up", this.isFirstListItem, () => {});
+        this.customizeExtraButton(button, "arrow-up", "Move Up", this.isFirstListItem, () => { });
         button.onClick(() => this.moveUp());
       })
       .addExtraButton((button) => {
-        this.styleExtraButton(button, "arrow-down", this.isLastListItem, () => {});
+        this.customizeExtraButton(button, "arrow-down", "Move Down", this.isLastListItem, () => { });
         button.onClick(() => this.moveDown());
       })
       .addExtraButton((button) => {
-        this.styleExtraButton(button, "trash", this.isOnlyListItem, () => this.delete());
+        this.customizeExtraButton(button, "trash", "Delete", this.isOnlyListItem, () =>
+          this.delete(),
+        );
       });
 
     // Remove the name and description, since it's not necessary for list items.
