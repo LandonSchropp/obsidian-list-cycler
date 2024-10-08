@@ -3,6 +3,7 @@ import { Setting } from "obsidian";
 import { SettingsView } from "settings/settings-view";
 import { ListItemSettings } from "types";
 import { splice } from "utilities";
+import { ConfirmDeleteModal } from "./confirm-delete-modal";
 
 const EMPTY_LIST_ITEM = {
   text: "",
@@ -72,18 +73,22 @@ export class GroupSettingsView {
     this.rerender();
   }
 
+  openConfirmDeleteModal() {
+    new ConfirmDeleteModal(this.app).open(() => this.delete());
+  }
+
   display(): void {
     const nameSetting = new Setting(this.containerEl)
       .setHeading()
       .setName(this.settings.name)
       .addButton((button) => {
-        button.setButtonText("Rename").onClick(() => {});
+        button.setButtonText("Rename").onClick(() => { });
       })
       .addButton((button) => {
         button
           .setButtonText("Delete")
           .setWarning()
-          .onClick(() => this.delete());
+          .onClick(() => this.openConfirmDeleteModal());
       });
 
     nameSetting.settingEl.style.marginTop = "3em";
