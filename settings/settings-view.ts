@@ -2,7 +2,7 @@ import { GroupSettingsView } from "settings/group-settings-view";
 import ListCyclerPlugin from "main";
 import { App, PluginSettingTab, Setting } from "obsidian";
 import { Settings, GroupSettings } from "types";
-import { splice } from "utilities";
+import { splice } from "utilities/array";
 import { EditGroupNameModal } from "./edit-group-name-modal";
 import { EMPTY_GROUP } from "./constants";
 

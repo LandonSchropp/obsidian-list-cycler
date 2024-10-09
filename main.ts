@@ -1,4 +1,4 @@
-import { cycleListItemBackward, cycleListItemForward } from "list-commands";
+import { cycleListItemBackward, cycleListItemForward } from "commands/list-commands";
 import { Plugin } from "obsidian";
 import { DEFAULT_SETTINGS, SettingsView } from "settings/settings-view";
 import { Settings } from "./types";
