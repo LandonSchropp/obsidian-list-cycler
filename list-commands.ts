@@ -1,55 +1,41 @@
-import { extractListItem, getListItemType, ListItemType, replacementListItem } from "list-items";
+import { findListItemPosition, findReplacementListItem } from "commands/list-items";
 import { Editor } from "obsidian";
 
-const NEXT_STATE = {
-  none: "bullet",
-  bullet: "number",
-  number: "checkbox",
-  checkbox: "none",
-} as const;
-
-const PREVIOUS_STATE = {
-  none: "checkbox",
-  bullet: "none",
-  number: "bullet",
-  checkbox: "number",
-} as const;
-
-function cycleListItem(editor: Editor, transformType: (type: ListItemType) => ListItemType): void {
+// TODO: Expand this to support _multiple_ lines.
+// TODO: Support proper replacement of numbers.
+function cycleListItem(editor: Editor, listItems: string[], offset: 1 | -1): void {
   const cursor = editor.getCursor();
   const line = editor.getLine(cursor.line);
-  const referenceLine = cursor.line === 0 ? line : editor.getLine(cursor.line - 1);
+  const position = findListItemPosition(line);
+  const listItem = line.slice(position[0], position[0] + position[1]);
 
-  const whitespace = line.match(/^\s*/)![0];
-  const listItem = extractListItem(line);
-  const referenceItem = extractListItem(referenceLine);
-
-  const type = getListItemType(listItem);
-  const replacementType = transformType(type);
+  const replacementListItem = findReplacementListItem(listItem, listItems, offset);
 
   editor.replaceRange(
-    replacementListItem(replacementType, referenceItem),
-    { line: cursor.line, ch: whitespace.length },
-    { line: cursor.line, ch: whitespace.length + listItem.length },
+    replacementListItem,
+    { line: cursor.line, ch: position[0] },
+    { line: cursor.line, ch: position[0] + position[1] },
   );
 }
 
 /**
- * Swaps the list item on the current line with the previous type of list item. If the current line
- * does not have a list item, one a checkbox list item will be inserted.
+ * Swaps the list item on the current line with the previous type of list item. If the line does not
+ * have an item in the provided list, then the last item will be used.
  *
  * @param editor The editor to operate on.
+ * @param listItems The list items to choose from.
  */
-export function cycleListItemBackward(editor: Editor): void {
-  cycleListItem(editor, (type) => PREVIOUS_STATE[type]);
+export function cycleListItemBackward(editor: Editor, listItems: string[]): void {
+  cycleListItem(editor, listItems, -1);
 }
 
 /**
- * Swaps the list item on the current line with the next type of list item. If the current line does
- * not have a list item, one a bullet list item will be inserted.
+ * Swaps the list item on the current line with the next type of list item. If the line does not
+ * have an item in the provided list, then the first item will be used.
  *
  * @param editor The editor to operate on.
+ * @param listItems The list items to choose from.
  */
-export function cycleListItemForward(editor: Editor): void {
-  cycleListItem(editor, (type) => NEXT_STATE[type]);
+export function cycleListItemForward(editor: Editor, listItems: string[]): void {
+  cycleListItem(editor, listItems, 1);
 }
