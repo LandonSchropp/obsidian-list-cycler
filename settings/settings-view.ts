@@ -91,10 +91,13 @@ export class SettingsView extends PluginSettingTab {
   }
 
   async createGroup(name: string) {
-    await this.spliceGroups(this.settings.groups.length, 0, [
-      { ...structuredClone(EMPTY_GROUP), name },
-    ]);
+    const group = { ...structuredClone(EMPTY_GROUP), name };
+    const index = this.settings.groups.length;
+
+    await this.spliceGroups(index, 0, [group]);
     this.rerender();
+
+    this.plugin.addCommands(group, index);
   }
 
   display(): void {

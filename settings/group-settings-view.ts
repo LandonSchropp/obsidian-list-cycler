@@ -1,7 +1,7 @@
 import { ListItemSettingsView } from "settings/list-item-settings-view";
 import { Setting } from "obsidian";
 import { SettingsView } from "settings/settings-view";
-import { ListItemSettings } from "types";
+import { GroupSettings, ListItemSettings } from "types";
 import { splice } from "utilities/array";
 import { ConfirmDeleteModal } from "./confirm-delete-modal";
 import { EditGroupNameModal } from "./edit-group-name-modal";
@@ -38,6 +38,8 @@ export class GroupSettingsView {
   }
 
   async setName(name: string): Promise<void> {
+    const currentGroupSettings: GroupSettings = structuredClone(this.settings);
+
     await this.settingsView.spliceGroups(this.index, 1, [
       {
         ...this.settings,
@@ -46,6 +48,9 @@ export class GroupSettingsView {
     ]);
 
     this.rerender();
+
+    this.plugin.removeCommands(currentGroupSettings);
+    this.plugin.addCommands(this.settings, this.index);
   }
 
   async spliceListItems(
@@ -69,6 +74,8 @@ export class GroupSettingsView {
   async delete() {
     this.settingsView.spliceGroups(this.index, 1, []);
     this.rerender();
+
+    this.plugin.removeCommands(this.settings);
   }
 
   openEditNameModal() {
