@@ -14,7 +14,6 @@ type Position = [start: number, length: number];
  * this function will return the position where a list item should be inserted.
  */
 export function findListItemPosition(line: string): Position {
-  console.log(line.match(LIST_ITEM_REGEX));
   const [, whitespace, listItem] = line.match(LIST_ITEM_REGEX)!;
   return [whitespace.length, listItem.length];
 }
