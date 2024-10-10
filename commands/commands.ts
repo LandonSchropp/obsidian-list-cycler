@@ -6,6 +6,15 @@ import {
 import { Editor } from "obsidian";
 
 /**
+ * @param line The line to check.
+ * @param whitespace The whitespace to compare against.
+ * @returns Whether the line has the same whitespace as the provided whitespace.
+ */
+function hasSameWhitespace(line: string, whitespace: string): boolean {
+  return line.startsWith(whitespace) && !/^\s/.test(line.slice(whitespace.length));
+}
+
+/**
  * Starting at the provided line and working backward, this function tries to find the first
  * previous number list item in the editor's document. An item is a match if:
  *
@@ -40,7 +49,7 @@ function findMatchingNumberListItem(editor: Editor, whitespace: string, line: nu
   }
 
   // If the current line is indented more than the original line, skip it.
-  if (currentLine.slice(whitespace.length).match(/^\s/)) {
+  if (!hasSameWhitespace(currentLine, whitespace)) {
     return findMatchingNumberListItem(editor, whitespace, line - 1);
   }
 
@@ -53,28 +62,53 @@ function findMatchingNumberListItem(editor: Editor, whitespace: string, line: nu
   return Number(currentLine.trim().match(/^\d+/)![0]);
 }
 
-// TODO: Expand this to support _multiple_ lines.
-function cycleListItem(editor: Editor, listItems: string[], offset: 1 | -1): void {
-  const cursor = editor.getCursor();
-  const line = editor.getLine(cursor.line);
+function replaceListItem(
+  editor: Editor,
+  lineNumber: number,
+  whitespace: string,
+  replacementListItem: string,
+): void {
+  const line = editor.getLine(lineNumber);
+
+  // If the line does not start with the same whitespace, then skip it.
+  if (!hasSameWhitespace(line, whitespace)) {
+    return;
+  }
+
   const segment = findListItemSegment(line);
-
-  const whitespace = line.slice(0, segment[0]);
-  const listItem = line.slice(segment[0], segment[0] + segment[1]);
-
-  let replacementListItem = findReplacementListItem(listItem, listItems, offset);
 
   // If the replacement is a number, find the next number in the sequence and replace the text.
   if (isNumberListItem(replacementListItem)) {
-    const number = findMatchingNumberListItem(editor, whitespace, cursor.line - 1);
+    const number = findMatchingNumberListItem(editor, whitespace, lineNumber - 1);
     replacementListItem = replacementListItem.replace(/^\d+/, String(number + 1));
   }
 
   editor.replaceRange(
     replacementListItem,
-    { line: cursor.line, ch: segment[0] },
-    { line: cursor.line, ch: segment[0] + segment[1] },
+    { line: lineNumber, ch: segment[0] },
+    { line: lineNumber, ch: segment[0] + segment[1] },
   );
+}
+
+// TODO: Expand this to support _multiple_ lines.
+function cycleListItem(editor: Editor, listItems: string[], offset: 1 | -1): void {
+  const cursorFrom = editor.getCursor("from");
+  const cursorTo = editor.getCursor("to");
+
+  // Fetch the data for the first line.
+  const line = editor.getLine(cursorFrom.line);
+  const segment = findListItemSegment(line);
+  const whitespace = line.slice(0, segment[0]);
+  const listItem = line.slice(segment[0], segment[0] + segment[1]);
+
+  // Identify the replacement using the first line. Any remaining lines will be modified to match
+  // the first line.
+  const replacementListItem = findReplacementListItem(listItem, listItems, offset);
+
+  // Replace each list item between the provided lines, ignoring any whose whitespace don't match.
+  for (let lineNumber = cursorFrom.line; lineNumber <= cursorTo.line; lineNumber++) {
+    replaceListItem(editor, lineNumber, whitespace, replacementListItem);
+  }
 }
 
 /**
