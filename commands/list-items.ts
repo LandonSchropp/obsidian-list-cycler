@@ -2,7 +2,7 @@
  * The regular expression used to match list items. This will _always_ match a given string,
  * regardless of whether or not it actually contains a list item.
  */
-const LIST_ITEM_REGEX = /^(\s*)((?:[-+*]|\d+\.) |)(.*)$/;
+const LIST_ITEM_REGEX = /^(\s*)((?:[-+*]|\d+\.) (?:\[.\] )?|)(.*)$/;
 const NUMBER_ITEM_REGEX = /^\d+\./;
 
 /** Represents the position of a substring in a string. */
@@ -14,6 +14,8 @@ type Position = [start: number, length: number];
  * this function will return the position where a list item should be inserted.
  */
 export function findListItemPosition(line: string): Position {
+  // TODO: Instead of matching a regex, should this compare directly to the list items provided in
+  // the settings? This would support additional list item types.
   const [, whitespace, listItem] = line.match(LIST_ITEM_REGEX)!;
   return [whitespace.length, listItem.length];
 }
