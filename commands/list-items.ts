@@ -52,3 +52,11 @@ export function findReplacementListItem(
 
   return listItems[(index + offset + listItems.length) % listItems.length];
 }
+
+/**
+ * @param listItem The list item to check.
+ * @returns `true` if the list item is a number list item.
+ */
+export function isNumberListItem(listItem: string): boolean {
+  return NUMBER_ITEM_REGEX.test(listItem);
+}
