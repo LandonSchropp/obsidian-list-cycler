@@ -1,4 +1,4 @@
-import { findListItemPosition, findReplacementListItem } from "commands/list-items";
+import { findListItemSegment, findReplacementListItem } from "commands/list-items";
 import { Editor } from "obsidian";
 
 // TODO: Expand this to support _multiple_ lines.
@@ -6,15 +6,15 @@ import { Editor } from "obsidian";
 function cycleListItem(editor: Editor, listItems: string[], offset: 1 | -1): void {
   const cursor = editor.getCursor();
   const line = editor.getLine(cursor.line);
-  const position = findListItemPosition(line);
-  const listItem = line.slice(position[0], position[0] + position[1]);
+  const segment = findListItemSegment(line);
+  const listItem = line.slice(segment[0], segment[0] + segment[1]);
 
   const replacementListItem = findReplacementListItem(listItem, listItems, offset);
 
   editor.replaceRange(
     replacementListItem,
-    { line: cursor.line, ch: position[0] },
-    { line: cursor.line, ch: position[0] + position[1] },
+    { line: cursor.line, ch: segment[0] },
+    { line: cursor.line, ch: segment[0] + segment[1] },
   );
 }
 

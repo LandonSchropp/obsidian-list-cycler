@@ -5,15 +5,15 @@
 const LIST_ITEM_REGEX = /^(\s*)((?:[-+*]|\d+\.) (?:\[.\] )?|)(.*)$/;
 const NUMBER_ITEM_REGEX = /^\d+\./;
 
-/** Represents the position of a substring in a string. */
-type Position = [start: number, length: number];
+/** Represents the position and length of a substring within another string. */
+type Segment = [start: number, length: number];
 
 /**
  * @param line The line to check.
  * @returns The start index and the length of the list item. If the line does not have a list item,
- * this function will return the position where a list item should be inserted.
+ * this function will return the segment where a list item should be inserted.
  */
-export function findListItemPosition(line: string): Position {
+export function findListItemSegment(line: string): Segment {
   // TODO: Instead of matching a regex, should this compare directly to the list items provided in
   // the settings? This would support additional list item types.
   const [, whitespace, listItem] = line.match(LIST_ITEM_REGEX)!;
