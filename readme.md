@@ -12,7 +12,9 @@ One of the simplest applications of List Cycler is cycling between major types o
 number, and none. List Cycler includes this group by default, so you can try it by running the `List
 Cycler: Cycle List Type Forward` and `List Cycler: Cycle List Type Backward` commands.
 
-TODO: Add clip.
+![List Type Example](/assets/list-type-example.gif)
+
+![List Type Settings](/assets/list-type-settings.png)
 
 ### Tasks
 
@@ -22,20 +24,26 @@ If you're using an Obsidian theme that supports alternative checkboxes, such as
 you can cycle between these with ease. Here's an example that switches between different types of
 tasks: to-do, in-progress, done, forward, schedule and cancel.
 
-TODO: Add clip.
+![Task Example](/assets/task-example.gif)
+
+![Task Settings](/assets/task-settings.png)
 
 ### Pros/Cons
 
 You could also use alternative checkboxes to quickly create a shortcut for creating pros/cons lists.
 
-TODO: Add clip.
+![Pros/Cons Example](/assets/pro-con-example.gif)
+
+![Pros/Cons Settings](/assets/pro-con-settings.png)
 
 ### Symbols
 
 Finally, you might create a new group for cycling between alternate checkbox symbols, such as the
 star, warning, idea, question and info icons.
 
-TODO: Add clip.
+![Symbol Example](/assets/symbol-example.gif)
+
+![Symbol Settings](/assets/symbol-settings.png)
 
 The possibilities are endless, and List Cycler can be configured to create whatever list types you’d
 like!
@@ -48,19 +56,13 @@ List Cycler has a few special considerations.
 
 List Cycler automatically matches the number scheming of your lists when cycling to numbered lists.
 
-TODO: Add clip.
-
 ### Multiline Support
 
 List Cycler works over multiple lines! Simply select the lines that you'd like to cycle, and then
 run your command.
 
-TODO: Add clip.
-
-The plugin will automatically skip li es that do not match the first line's indentation, allowing
+The plugin will automatically skip lines that do not match the first line's indentation, allowing
 you to easily avoid nested line and blank lines.
-
-TODO: Add clip.
 
 ## Configuration
 
