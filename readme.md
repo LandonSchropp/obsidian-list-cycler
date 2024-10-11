@@ -74,8 +74,6 @@ like!
 
 ## Special Features
 
-List Cycler has a few special considerations.
-
 ### Smart Numbering
 
 List Cycler automatically matches the number scheming of your lists when cycling to numbered lists.
