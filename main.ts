@@ -4,7 +4,13 @@ import { SettingsView } from "settings/settings-view";
 import { GroupSettings, Settings } from "./types";
 import { kebabCase } from "utilities/string";
 import { sanitizeListItem } from "settings/sanitize";
-import { DEFAULT_SETTINGS } from "settings/constants";
+import {
+  BULLET_LIST_ITEM,
+  DEFAULT_SETTINGS,
+  EMPTY_LIST_ITEM,
+  NUMBER_LIST_ITEM,
+  TASK_LIST_ITEM,
+} from "settings/constants";
 
 export default class ListCyclerPlugin extends Plugin {
   settings: Settings;
@@ -12,10 +18,41 @@ export default class ListCyclerPlugin extends Plugin {
   async onload() {
     await this.loadSettings();
 
+    // Add the group commands.
     for (const [index, group] of this.settings.groups.entries()) {
       this.addCommands(group, index);
     }
 
+    // Add the other commands.
+    this.addCommand({
+      id: "remove-list",
+      name: "Remove List",
+      icon: "delete",
+      editorCallback: (editor) => cycleListItemForward(editor, [EMPTY_LIST_ITEM.text]),
+    });
+
+    this.addCommand({
+      id: "convert-to-bullet-list",
+      name: "Convert to Bullet List",
+      icon: "list",
+      editorCallback: (editor) => cycleListItemForward(editor, [`${BULLET_LIST_ITEM.text} `]),
+    });
+
+    this.addCommand({
+      id: "convert-to-number-list",
+      name: "Convert to Number List",
+      icon: "list-ordered",
+      editorCallback: (editor) => cycleListItemForward(editor, [`${NUMBER_LIST_ITEM.text} `]),
+    });
+
+    this.addCommand({
+      id: "convert-to-task-list",
+      name: "Convert to Task List",
+      icon: "list-todo",
+      editorCallback: (editor) => cycleListItemForward(editor, [`${TASK_LIST_ITEM.text} `]),
+    });
+
+    // Load the settings
     this.addSettingTab(new SettingsView(this.app, this));
   }
 

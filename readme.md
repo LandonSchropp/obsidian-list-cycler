@@ -131,9 +131,6 @@ you want.
 For convenience, List Cycler includes a few other commands for working with lists. These aren't part
 of the cycling functionality, but they're still useful.
 
-- `List Cycler: Select Task`: This command selects the character _inside_ of the current line's task
-  list. This makes it it really easy to quickly change the current task list item's type _without_
-  needing to cycle through it. (TODO)
 - `List Cycler: Remove List`: Converts the current line or the selected lines into a task list.
 - `List Cycler: Convert to Task List`: Converts the current line or the selected lines into a task
   list.
