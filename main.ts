@@ -1,9 +1,10 @@
 import { cycleListItemBackward, cycleListItemForward } from "commands/commands";
 import { Plugin } from "obsidian";
-import { DEFAULT_SETTINGS, SettingsView } from "settings/settings-view";
+import { SettingsView } from "settings/settings-view";
 import { GroupSettings, Settings } from "./types";
 import { kebabCase } from "utilities/string";
 import { sanitizeListItem } from "settings/sanitize";
+import { DEFAULT_SETTINGS } from "settings/constants";
 
 export default class ListCyclerPlugin extends Plugin {
   settings: Settings;

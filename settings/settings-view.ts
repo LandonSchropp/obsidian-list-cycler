@@ -6,52 +6,6 @@ import { splice } from "utilities/array";
 import { EditGroupNameModal } from "./edit-group-name-modal";
 import { EMPTY_GROUP } from "./constants";
 
-/** The default settings for List Cycler. */
-export const DEFAULT_SETTINGS: Settings = {
-  groups: [
-    {
-      name: "List Type",
-      listItems: [
-        {
-          text: "-",
-        },
-        {
-          text: "1. ",
-        },
-        {
-          text: "- [ ]",
-        },
-        {
-          text: "",
-        },
-      ],
-    },
-    {
-      name: "Task",
-      listItems: [
-        {
-          text: "- [ ]",
-        },
-        {
-          text: "- [x]",
-        },
-        {
-          text: "- [-]",
-        },
-        {
-          text: "- [/]",
-        },
-        {
-          text: "- [>]",
-        },
-        {
-          text: "- [<]",
-        },
-      ],
-    },
-  ],
-};
-
 /** The settings view for List Cycler. */
 export class SettingsView extends PluginSettingTab {
   plugin: ListCyclerPlugin;
