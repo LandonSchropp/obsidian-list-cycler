@@ -14,7 +14,13 @@ Cycler: Cycle List Type Forward` and `List Cycler: Cycle List Type Backward` com
 
 ![List Type Example](/assets/list-type-example.gif)
 
+<details>
+
+<summary>Settings</summary>
+
 ![List Type Settings](/assets/list-type-settings.png)
+
+</details>
 
 ### Tasks
 
@@ -26,7 +32,13 @@ tasks: to-do, in-progress, done, forward, schedule and cancel.
 
 ![Task Example](/assets/task-example.gif)
 
+<details>
+
+<summary>Settings</summary>
+
 ![Task Settings](/assets/task-settings.png)
+
+</details>
 
 ### Pros/Cons
 
@@ -34,7 +46,13 @@ You could also use alternative checkboxes to quickly create a shortcut for creat
 
 ![Pros/Cons Example](/assets/pro-con-example.gif)
 
+<details>
+
+<summary>Settings</summary>
+
 ![Pros/Cons Settings](/assets/pro-con-settings.png)
+
+</details>
 
 ### Symbols
 
@@ -43,7 +61,13 @@ star, warning, idea, question and info icons.
 
 ![Symbol Example](/assets/symbol-example.gif)
 
+<details>
+
+<summary>Settings</summary>
+
 ![Symbol Settings](/assets/symbol-settings.png)
+
+</details>
 
 The possibilities are endless, and List Cycler can be configured to create whatever list types you’d
 like!
