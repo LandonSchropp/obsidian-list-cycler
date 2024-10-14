@@ -11,7 +11,7 @@ export default [
   ...typescript.configs.recommended,
   prettier,
   {
-    files: ["**/*.{js,ts,mjs}"],
+    files: ["**/*.{js,ts,cjs,mjs}"],
     languageOptions: {
       globals: {
         ...globals.node,
