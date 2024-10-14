@@ -19,7 +19,11 @@ export class EditGroupNameModal {
   updateSaveButton(button: ButtonComponent): void {
     button.setDisabled(!this.hasName);
 
-    this.hasName ? button.setCta() : button.removeCta();
+    if (this.hasName) {
+      button.setCta();
+    } else {
+      button.removeCta();
+    }
 
     button.buttonEl.style.cursor = this.hasName ? "pointer" : "not-allowed";
     button.buttonEl.style.opacity = this.hasName ? "100%" : "50%";
