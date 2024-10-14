@@ -99,11 +99,11 @@ export class ListItemSettingsView {
         text.inputEl.style.marginRight = "auto";
       })
       .addExtraButton((button) => {
-        this.customizeExtraButton(button, "arrow-up", "Move Up", this.isFirstListItem, () => { });
+        this.customizeExtraButton(button, "arrow-up", "Move Up", this.isFirstListItem, () => {});
         button.onClick(() => this.moveUp());
       })
       .addExtraButton((button) => {
-        this.customizeExtraButton(button, "arrow-down", "Move Down", this.isLastListItem, () => { });
+        this.customizeExtraButton(button, "arrow-down", "Move Down", this.isLastListItem, () => {});
         button.onClick(() => this.moveDown());
       })
       .addExtraButton((button) => {

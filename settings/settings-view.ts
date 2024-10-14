@@ -62,7 +62,7 @@ export class SettingsView extends PluginSettingTab {
       .setName("List Cycler")
       .setDesc(
         "Configure the groups and list items to cycle through. For each group, List Cycler " +
-        "will generate commands for you to cycle through the list items.",
+          "will generate commands for you to cycle through the list items.",
       );
 
     titleSetting.nameEl.style.fontSize = "var(--h2-size)";
