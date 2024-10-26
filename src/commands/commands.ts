@@ -4,15 +4,8 @@ import {
   isNumberListItem,
 } from "commands/list-items";
 import { Editor } from "obsidian";
-
-/**
- * @param line The line to check.
- * @param whitespace The whitespace to compare against.
- * @returns Whether the line has the same whitespace as the provided whitespace.
- */
-function hasSameWhitespace(line: string, whitespace: string): boolean {
-  return line.startsWith(whitespace) && !/^\s/.test(line.slice(whitespace.length));
-}
+import { getCursor, getLine, moveCursorToEndOfLineItem } from "utilities/editor";
+import { hasSameWhitespace } from "utilities/lines";
 
 /**
  * Starting at the provided line and working backward, this function tries to find the first
@@ -92,28 +85,27 @@ function replaceListItem(
 
 // TODO: Expand this to support _multiple_ lines.
 function cycleListItem(editor: Editor, listItems: string[], offset: 1 | -1): void {
-  const cursorFrom = editor.getCursor("from");
-  const cursorTo = editor.getCursor("to");
+  const cursor = getCursor(editor);
 
   // Fetch the data for the first line.
-  const line = editor.getLine(cursorFrom.line);
-  const segment = findListItemSegment(line);
-  const whitespace = line.slice(0, segment[0]);
-  const listItem = line.slice(segment[0], segment[0] + segment[1]);
+  const { whitespace, listItem } = getLine(editor);
 
   // Identify the replacement using the first line. Any remaining lines will be modified to match
   // the first line.
   const replacementListItem = findReplacementListItem(listItem, listItems, offset);
 
   // Replace each list item between the provided lines, ignoring any whose whitespace don't match.
-  for (let lineNumber = cursorFrom.line; lineNumber <= cursorTo.line; lineNumber++) {
+  for (let lineNumber = cursor.from.line; lineNumber <= cursor.to.line; lineNumber++) {
     replaceListItem(editor, lineNumber, whitespace, replacementListItem);
   }
+
+  // If the cursor is _inside_ of a list item and no text is selected, move to to after the list item.
+  moveCursorToEndOfLineItem(editor);
 }
 
 /**
  * Swaps the list item on the current line with the previous type of list item. If the line does not
- * have an item in the provided list, then the last item will be used.
+ * contain an item from the provided list, then the last item will be used.
  *
  * @param editor The editor to operate on.
  * @param listItems The list items to choose from.
@@ -124,7 +116,7 @@ export function cycleListItemBackward(editor: Editor, listItems: string[]): void
 
 /**
  * Swaps the list item on the current line with the next type of list item. If the line does not
- * have an item in the provided list, then the first item will be used.
+ * contain an item from the provided list, then the first item will be used.
  *
  * @param editor The editor to operate on.
  * @param listItems The list items to choose from.
