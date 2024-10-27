@@ -70,7 +70,7 @@ export default class ListCyclerPlugin extends Plugin {
     this.addCommand({
       id: this.generateCommandId(group.name, "forward"),
       name: `Cycle ${group.name} Forward`,
-      icon: "forward",
+      icon: "list",
       editorCallback: (editor) => {
         // NOTE: The list items must be loaded dynamically in the callback. Otherwise, the plugin
         // will not respond immediately to changes in the settings.
@@ -81,7 +81,7 @@ export default class ListCyclerPlugin extends Plugin {
     this.addCommand({
       id: this.generateCommandId(group.name, "backward"),
       name: `Cycle ${group.name} Backward`,
-      icon: "backward",
+      icon: "list",
       editorCallback: (editor) => {
         // NOTE: The list items must be loaded dynamically in the callback. Otherwise, the plugin
         // will not respond immediately to changes in the settings.
